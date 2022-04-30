@@ -20,7 +20,7 @@ static class Program
     private static int j = 1;
     private static object locker = new object();
     private static Thread myThread = new Thread(Click);
-    private static bool Activated = false, leftUp, lastLeftUp, leftDown, lastLeftDown;
+    private static bool Activated = false, leftUp, lastLeftUp, leftDown;
     private static string appName = "Macro.exe";
 
     [STAThread]
@@ -93,7 +93,6 @@ static class Program
                     }
                     if (leftDown)
                     {
-                        lastLeftDown = true;
                         return new IntPtr(1);
                     }
                     leftDown = true;
@@ -101,7 +100,6 @@ static class Program
 
                 case WM_LBUTTONUP:
                     leftDown = false;
-                    lastLeftDown = false;
                     if (leftUp)
                     {
                         sw.Stop();
