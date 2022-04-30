@@ -1,10 +1,5 @@
-using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Drawing;
-
 
 namespace Macro;
 
@@ -12,7 +7,6 @@ static class Program
 {
     private const int WH_KEYBOARD_LL = 13;
     private const int WH_MOUSE_LL = 14;
-
     private const int WM_KEYDOWN = 0x0100;
     private const int WM_LBUTTONDOWN = 0x0201;
     private const int WM_LBUTTONUP = 0x0202;
@@ -54,19 +48,32 @@ static class Program
         if ((nCode >= 0) && (wParam == (IntPtr)WM_KEYDOWN))
         {
             int vkCode = Marshal.ReadInt32(lParam);
-            if (vkCode == 109) // pressed -
+            switch(vkCode)
             {
-                if (Activated)
-                {
-                    Activated = false;
-                    Console.WriteLine("Deactivated");
-                }
-                else  
-                {
-                    Activated = true;
-                    Console.WriteLine("Activated");
-                }
+                case 109: // pressed -
+                    if (Activated)
+                    {
+                        Activated = false;
+                        Console.WriteLine("Deactivated");
+                    }
+                    else  
+                    {
+                        Activated = true;
+                        Console.WriteLine("Activated");
+                    }
+                    break;
+                case 111: // pressed /
+                    for (int i = 1; i < 1214; i++) // bc2: 1214 0.75
+                    {
+                        mouse_event(MouseFlags.Move, 1, 0, 0, UIntPtr.Zero);
+                        if (i%10 == 0)
+                            Thread.Sleep(10);
+                    }
+                    break;
+                default:
+                    break;
             }
+            
         }
         return CallNextHookEx(keyboardHookID, nCode, wParam, lParam);
     }
